@@ -10,7 +10,7 @@ import tempfile
 
 from werkzeug.wsgi import wrap_file
 from werkzeug.wrappers import Request, Response
-from executor import execute
+import subprocess
 
 
 @Request.application
@@ -56,7 +56,7 @@ def application(request):
         args += [file_name, file_name + ".pdf"]
 
         # Execute the command using executor
-        execute(' '.join(args))
+        subprocess.run(args)
 
         return Response(
             wrap_file(request.environ, open(file_name + '.pdf')),

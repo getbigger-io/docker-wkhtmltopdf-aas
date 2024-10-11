@@ -126,3 +126,8 @@ This image was built at [Openlabs](http://www.openlabs.co.in).
 This image is professionally supported by [Openlabs](http://www.openlabs.co.in).
 If you are looking for on-site teaching or consulting support, contact our
 [sales](mailto:sales@openlabs.co.in) and [support](mailto:support@openlabs.co.in) teams.
+
+
+
+
+docker build --platform linux/amd64 --target application --file ./Dockerfile .
