@@ -32,19 +32,7 @@ Take a note of the public port number where docker binds to.
 There are multiple ways to generate a PDF of HTML using the
 service.
 
-### Uploading a HTML file
 
-This is a convenient way to use the service from command line
-utilities like curl.
-
-```sh
-curl -X POST -vv -F 'file=@path/to/local/file.html' http://<docker-host>:<port>/ -o path/to/output/file.pdf
-```
-
-where:
-
-* docker-host is the hostname or address of the docker host running the container
-* port is the public port to which the container is bound to.
 
 ### JSON API
 
@@ -52,46 +40,17 @@ If you are planning on using this service in your application,
 it might be more convenient to use the JSON API that the service
 uses.
 
-Here is an example using python requests:
-
-```python
-import json
-import requests
-
-url = 'http://<docker_host>:<port>/'
-data = {
-    'contents': open('/file/to/convert.html').read().encode('base64'),
-}
-headers = {
-    'Content-Type': 'application/json',    # This is important
-}
-response = requests.post(url, data=json.dumps(data), headers=headers)
-
-# Save the response contents to a file
-with open('/path/to/local/file.pdf', 'wb') as f:
-    f.write(response.content)
-```
-
-Here is another example in python, but this time we pass options to wkhtmltopdf.
+Here is an example using axios requests:
 When passing our settings we omit the double dash "--" at the start of the option.
 For documentation on what options are available, visit http://wkhtmltopdf.org/usage/wkhtmltopdf.txt
 
-```python
+```NodeJs
 import json
 import requests
 
 url = 'http://<docker_host>:<port>/'
 data = {
     'contents': open('/file/to/convert.html').read().encode('base64'),
-    'options': {
-        #Omitting the "--" at the start of the option
-        'margin-top': '6', 
-        'margin-left': '6', 
-        'margin-right': '6', 
-        'margin-bottom': '6', 
-        'page-width': '105mm', 
-        'page-height': '40mm'
-    }
 }
 headers = {
     'Content-Type': 'application/json',    # This is important
@@ -102,6 +61,9 @@ response = requests.post(url, data=json.dumps(data), headers=headers)
 with open('/path/to/local/file.pdf', 'wb') as f:
     f.write(response.content)
 ```
+
+
+
 
 ## TODO
 

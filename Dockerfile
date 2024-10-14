@@ -1,21 +1,21 @@
-FROM python:bookworm
+FROM node:20
 
-RUN apt-get update
+RUN apt-get update -y
 RUN apt-get upgrade -y
 
-# Download and install wkhtmltopdf
-RUN apt-get install -y build-essential xorg libssl-dev libxrender-dev wget gdebi
-RUN wget http://ftp.de.debian.org/debian/pool/main/w/wkhtmltopdf/wkhtmltopdf_0.12.6-2+b1_amd64.deb
-RUN gdebi --n wkhtmltopdf_0.12.6-2+b1_amd64.deb
 
-# Install dependencies for running web service
-RUN apt-get install -y python3-pip
-RUN pip install werkzeug gunicorn
+RUN apt-get install curl gnupg -y \
+  && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+  && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+  && apt-get update \
+  && apt-get install google-chrome-stable -y --no-install-recommends
 
-ADD app.py /app.py
+RUN ls /usr/bin/
+
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node app.js ./
+
+RUN npm install --frozen-lockfile
+
 EXPOSE 80
-
-ENTRYPOINT ["usr/local/bin/gunicorn"]
-
-# Show the extended help
-CMD ["-b", "0.0.0.0:80", "--log-file", "-", "app:application"]
+CMD ["node","app.js"]
